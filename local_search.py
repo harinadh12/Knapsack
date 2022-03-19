@@ -1,6 +1,6 @@
 from random import Random 
 import numpy as np
-
+import itertools
 class LocalSearch():
 
     def __init__(self, seed, n, max_weight):
@@ -63,3 +63,65 @@ class LocalSearch():
         if totalWeight > self.max_weight:
             totalValue = 0
         return [totalValue, totalWeight]   #returns a list of both total value and total weight
+    
+    #flips one item of the knapsack initial solution
+    def gen_one_flip_neighbood(self,x):
+        nbhood = []
+        for _ in range(self.n):
+            tempx = x[:]
+
+            ind = self.myPRNG.randint(0,self.n-1)
+            if tempx[ind] == 0:
+                tempx[ind] = 1
+            else:
+                tempx[ind] = 0
+            nbhood.append(tempx)
+        
+        return nbhood
+
+    #flips 2 items of the knapsack initial solution
+    def gen_two_flip_neighbood(self,x):
+        nbhood = []
+        
+        for i, j in itertools.combinations(range(0, self.n), 2):
+            tempx = x[:]
+            if tempx[i] == 1:
+                tempx[i] = 0
+            else:
+                tempx[i] = 1
+            if tempx[j] == 1:
+                tempx[j] = 0
+            else:
+                tempx[j] = 1
+                
+            nbhood.append(tempx)
+        return nbhood
+
+    #flips m items of the 1flip solutions of the initial solution
+    def gen_one_m_flip_neighbood(self,x, m):
+        nbhood = []
+        for i in range(0, self.n):
+            nbhood.append(x[:])
+            if nbhood[i][i] == 1:
+                nbhood[i][i] = 0
+            else:
+                nbhood[i][i] = 1
+            for _ in range(self.myPRNG.randint(0,m)):
+                rand_int = self.myPRNG.randint(0,self.n-1)
+                if nbhood[i][rand_int] == 1:
+                    nbhood[i][rand_int] = 0
+                else:
+                    nbhood[i][rand_int] = 1
+        return nbhood
+
+    # swaps 2 items i.e., 1 into and other out of the knapsack
+    def gen_swap_neighbood(self,x,m):
+        nbhood = []
+        for _ in range(m):
+            tempx = x[:]
+            i = self.myPRNG.randint(0,self.n-1)
+            j = self.myPRNG.randint(0,self.n-1)
+            tempx[i], tempx[j] = tempx[j], tempx[i]
+            nbhood.append(tempx)
+            
+        return nbhood    

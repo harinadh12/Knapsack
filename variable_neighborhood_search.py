@@ -12,8 +12,8 @@ ls.initialize_weights()
 #monitor the number of solutions evaluated
 solutionsChecked = 0
 
-best_sol = ls.remove_infeasibility(initial_rand_solution())
-best_val = total_value(best_sol)
+best_sol = ls.remove_infeasibility(ls.initialize_randn_solution())
+best_val = ls.get_total_value(best_sol)
 curr_sol = best_sol[:]
 
 max_k = 4 # k- neoghborhood operators
@@ -23,7 +23,7 @@ while solutionsChecked < 2000:
         if k == 1:
             nborhood = ls.gen_one_flip_neighbood(curr_sol) # get 1 flip neighborhood
         elif k== 2:
-            nborhood = ls.gen_2_flip_neighbood(curr_sol) # get 2 flip neighborhood
+            nborhood = ls.gen_two_flip_neighbood(curr_sol) # get 2 flip neighborhood
         elif k== 3:
             nborhood = ls.gen_one_m_flip_neighbood(curr_sol,k) # get m flip neighborhood of initial 1 flip neighborhood
         elif k== 4:
